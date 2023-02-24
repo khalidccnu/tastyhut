@@ -1,33 +1,28 @@
+let searchKW = document.querySelector("#search").value;
+let itemArea = document.querySelector(".item-area");
+
 // get object from json format
-let foodAll = async _ => {
-    let response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=chicken`);
+let foodAll = async searchKW => {
+    let response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchKW}`);
     return await response.json();
 }
 
 // get details from specific food
-let viewFood = (values) => {
-    let foodViewTitle = document.getElementById("food-view-title");
-    let foodViewThumbnail = document.getElementById("food-view-thumbnail");
-    let foodViewCategory = document.getElementById("food-view-category");
-    let foodViewArea = document.getElementById("food-view-area");
-    let foodViewInstruction = document.getElementById("food-view-instruction");
-    let foodViewYoutube = document.getElementById("food-view-youtube");
-
-    foodViewTitle.innerText = values[0];
-    foodViewThumbnail.src = values[1];
-    foodViewCategory.innerHTML = `<span class="fw-medium">Category: </span> ${values[2]}`;
-    foodViewArea.innerHTML = `<span class="fw-medium">Area: </span> ${values[3]}`;
-    foodViewInstruction.innerHTML = `<span class="fw-medium">Instruction: </span> ${values[4]}`;
-    foodViewYoutube.innerHTML = `<span class="fw-medium">Youtube: </span> ${values[5]}`;
+let viewFood = values => {
+    document.getElementById("food-view-title").innerText = values[0];
+    document.getElementById("food-view-thumbnail").src = values[1];
+    document.getElementById("food-view-category").innerHTML = `<span class="fw-medium">Category: </span> ${values[2]}`;
+    document.getElementById("food-view-area").innerHTML = `<span class="fw-medium">Area: </span> ${values[3]}`;
+    document.getElementById("food-view-instruction").innerHTML = `<span class="fw-medium">Instruction: </span> ${values[4]}`;
+    document.getElementById("food-view-youtube").innerHTML = `<span class="fw-medium">Youtube: </span> ${values[5]}`;
 }
 
 // display food in food container
-let displayFoodItem = async callback => {
-    let itemArea = document.querySelector(".item-area");
+let displayFoodItem = async (searchKW, callback) => {
     let food;
     let foodCount = 0;
 
-    await callback().then(response => food = response);
+    await callback(searchKW).then(response => food = response);
     let foods = food.meals;
 
     for (let food of foods) {
@@ -62,7 +57,14 @@ let displayFoodItem = async callback => {
     }
 }
 
+// get value depends on search
+document.querySelector("#btn-search").addEventListener("click", _ => {
+    itemArea.textContent = "";
+    searchKW = document.querySelector("#search").value;
+    displayFoodItem(searchKW, foodAll);
+});
+
 // initial load
 onload = _ => {
-    displayFoodItem(foodAll);
+    displayFoodItem(searchKW, foodAll);
 }
