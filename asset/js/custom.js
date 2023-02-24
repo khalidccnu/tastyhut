@@ -7,6 +7,28 @@ let foodAll = async searchKW => {
     return await response.json();
 }
 
+// check food exist or not
+let isExist = searchKW => {
+    if(searchKW == null) {
+        if (!document.querySelector("#food .non-exist")) {
+            let alert = document.createElement("div");
+
+            alert.classList.add("non-exist", "alert", "alert-warning", "mx-auto");
+            alert.setAttribute("role", "alert");
+            alert.style.maxWidth = "30rem";
+            alert.innerText = "No foods were found to match your search.";
+
+            document.querySelector(".food").insertBefore(alert, itemArea);
+        }
+
+        return false;
+    } else {
+        if (document.querySelector("#food .non-exist")) document.querySelector("#food .non-exist").parentNode.removeChild(document.querySelector("#food .non-exist"));
+
+        return true;
+    }
+}
+
 // get details from specific food
 let viewFood = values => {
     document.getElementById("food-view-title").innerText = values[0];
@@ -24,6 +46,9 @@ let displayFoodItem = async (searchKW, callback) => {
 
     await callback(searchKW).then(response => food = response);
     let foods = food.meals;
+    let exist = isExist(foods);
+
+    if (exist === false) return false;
 
     for (let food of foods) {
         let foodValues = [food.strMeal, food.strMealThumb, food.strCategory, food.strArea, food.strInstructions, food.strYoutube];
