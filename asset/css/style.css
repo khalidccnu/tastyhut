@@ -24,3 +24,16 @@ a {
 .banner {
     max-width: 50rem;
 }
+
+/* ===== Food ===== */
+#food .item-area {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* ===== Media Query ===== */
+@media screen and (max-width: 575px) {
+    /* ===== Food ===== */
+    #food .item-area {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
