@@ -1,0 +1,26 @@
+/* ===== Google Font ===== */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* ===== Common ===== */
+body {
+    font-family: "Poppins", sans-serif;
+    color: #403F3F;
+}
+
+a {
+    color: #403F3F;
+}
+
+/* ===== Banner ===== */
+#banner {
+    background: url("../img/bg-banner.png") no-repeat top center / cover;
+    min-height: 30rem;
+}
+
+#banner .overlay {
+    background-color: rgba(16, 15, 15, 0.7);
+}
+
+.banner {
+    max-width: 50rem;
+}
