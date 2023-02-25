@@ -1,5 +1,6 @@
 let searchKW = document.querySelector("#search").value;
 let itemArea = document.querySelector(".item-area");
+let foodStart = 0, foodEnd = 5;
 
 // get object from json format
 let foodAll = async searchKW => {
@@ -20,6 +21,8 @@ let isExist = searchKW => {
 
             document.querySelector(".food").insertBefore(alert, itemArea);
         }
+
+        document.querySelector("#btn-show-more").classList.add("d-none");
 
         return false;
     } else {
@@ -42,7 +45,6 @@ let viewFood = values => {
 // display food in food container
 let displayFoodItem = async (searchKW, callback) => {
     let food;
-    let foodCount = 0;
 
     await callback(searchKW).then(response => food = response);
     let foods = food.meals;
@@ -50,8 +52,14 @@ let displayFoodItem = async (searchKW, callback) => {
 
     if (exist === false) return false;
 
-    for (let food of foods) {
-        let foodValues = [food.strMeal, food.strMealThumb, food.strCategory, food.strArea, food.strInstructions, food.strYoutube];
+    if (foodStart > foods.length) foodStart -= foodStart - (foods.length - 1);
+    if (foodEnd > foods.length) {
+        foodEnd = foods.length - 1;
+        document.querySelector("#btn-show-more").classList.add("d-none");
+    } else document.querySelector("#btn-show-more").classList.remove("d-none");
+
+    for (let num = foodStart; num <= foodEnd; num++) {
+        let foodValues = [foods[num].strMeal, foods[num].strMealThumb, foods[num].strCategory, foods[num].strArea, foods[num].strInstructions, foods[num].strYoutube];
         let card = document.createElement("div");
 
         card.className = "card";
@@ -75,17 +83,20 @@ let displayFoodItem = async (searchKW, callback) => {
         };
 
         itemArea.appendChild(card);
-
-        foodCount++;
-
-        if (foodCount === 6) break;
     }
 }
 
 // get value depends on search
 document.querySelector("#btn-search").addEventListener("click", _ => {
+    foodStart = 0; foodEnd = 5;
     itemArea.textContent = "";
     searchKW = document.querySelector("#search").value;
+    displayFoodItem(searchKW, foodAll);
+});
+
+// display more food
+document.querySelector("#btn-show-more").addEventListener("click", _ => {
+    foodStart += 6; foodEnd += 6;
     displayFoodItem(searchKW, foodAll);
 });
 
